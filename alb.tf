@@ -2,9 +2,9 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 5.0"
 
-  name = "my-alb"
+  name = var.albname_Coalfire
 
-  load_balancer_type = "application"
+  load_balancer_type = var.albtype_Coalfire
 
   vpc_id             =  module.vpc.vpc_id
   subnets            =  module.vpc.public_subnets

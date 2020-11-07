@@ -1,7 +1,7 @@
 
 resource "aws_key_pair" "master-key" {
-  key_name   = "apache"
-  public_key = file("~/.ssh/id_rsa.pub")
+  key_name   = var.KeyCoalfire
+  public_key = file(var.Key_Path_default)
 }
 
 
@@ -9,10 +9,10 @@ resource "aws_key_pair" "master-key" {
 module "ec2_cluster" {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "~> 2.0"
-  name                   = "my-ec2"
+  name                   = "${var.ec2name_Coalfire}-public"
   instance_count         = 1
-  ami                    = "ami-02f147dfb8be58a10"
-  instance_type          = "t2.micro"
+  ami                    = var.redhat_ami
+  instance_type          = var.instance-type
   associate_public_ip_address = true
   key_name               = aws_key_pair.master-key.key_name
   monitoring             = true
@@ -34,10 +34,10 @@ module "ec2_cluster" {
 module "ec2_cluster_private" {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "~> 2.0"
-  name                   = "my-ec2"
+  name                   = "${var.ec2name_Coalfire}-private"
   instance_count         = 1
-  ami                    = "ami-02f147dfb8be58a10"
-  instance_type          = "t2.micro"
+  ami                    = var.redhat_ami
+  instance_type          = var.instance-type
   monitoring             = true
   user_data              = file("userdata.sh")
   vpc_security_group_ids = [aws_security_group.ec2-sg.id]
